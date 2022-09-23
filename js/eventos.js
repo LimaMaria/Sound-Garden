@@ -2,6 +2,8 @@ const urlParams = new URLSearchParams(window.location.search);
 const myParam = urlParams.get('id');
 const BASE_URL = "https://xp41-soundgarden-api.herokuapp.com/events/";
 
+
+// *********************************************************************************************************  Get Todos os eventos
 async function getEvents() {
     const listaDeEventos = document.querySelector("#listaDeEventos");
     try {
@@ -20,6 +22,7 @@ async function getEvents() {
         console.log(error);
     }
 }
+// *********************************************************************************************************** Get eventos Principais
 
 async function getEventsHome() {
     const listaDeEventos = document.querySelector("#listaDeEventos");
@@ -52,14 +55,15 @@ async function getEventsHome() {
     }
 }
 
+// ****************************************************************************************************************** Get eventos Admin
 async function getEventsAdmin() {
     const eventosAdmin = document.querySelector("#eventosAdmin");
     try {
         const response = await fetch(`${BASE_URL}`);
         const data = await response.json();
-        data.forEach((element) => {
+        data.forEach((element, index) => {
             const eventItem = `<tr>
-            <th scope="row">${element._id}</th>
+            <th scope="row">${index + 1 }</th>
             <td>${element.scheduled.slice(0,10)} ${element.scheduled.slice(11,16)}</td>
             <td>${element.name}</td>
             <td>${element.attractions}</td>
@@ -75,7 +79,7 @@ async function getEventsAdmin() {
         console.log(error);
     }
 }
-
+// ********************************************************************************************************* Form adicionando evento
 async function eventData() {
     try {
         const response = await fetch(`${BASE_URL}`);
@@ -95,7 +99,9 @@ async function eventData() {
     }
 }
 
+// *********************************************************************************************************************** Button delete
 function deleteEventButton() {
+    event.preventDefault();
       fetch(BASE_URL + myParam,{
         method: 'DELETE'
       })
@@ -106,10 +112,11 @@ function deleteEventButton() {
           return alert("Evento excluido com sucesso!!!");
         })
         .then(result => console.log(result))
+        .then(()=> location.reload())
         .catch(error => console.log('error', error));
-        event.preventDefault();
+        
 }
-
+// ************************************************************************************************************************* Edit Event
 function editEventButton() {
     var raw = {
         "name": document.querySelector("#nome").value,
@@ -135,10 +142,11 @@ function editEventButton() {
           return alert("Evento atualizado com sucesso!!!");
         })
         .then(result => console.log(result))
+        .then(()=> location.reload())
         .catch(error => console.log('error', error));
         event.preventDefault();
 }
-
+// ************************************************************************************************************************ Event Button
 function createEventButton() {
     var raw = {
         "name": document.querySelector("#nome").value,
